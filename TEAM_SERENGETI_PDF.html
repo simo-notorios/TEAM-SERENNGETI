@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TEAM SERENGETI - Registration PDF</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+body {
+    font-family: "Poppins", sans-serif;
+    padding: 20px;
+    background: #111;
+    color: white;
+}
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #222;
+    padding: 20px;
+    border-radius: 12px;
+}
+h1 {
+    text-align: center;
+    color: orange;
+}
+label {
+    display: block;
+    margin-top: 15px;
+}
+input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: none;
+}
+button {
+    margin-top: 20px;
+    padding: 12px 20px;
+    background: orange;
+    color: black;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+}
+button:hover {
+    background: #ff6600;
+}
+img#logo {
+    display: block;
+    margin: 0 auto 20px;
+    width: 120px;
+    border-radius: 50%;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <img id="logo" src="logo.png" alt="TEAM SERENGETI Logo">
+    <h1>TEAM SERENGETI</h1>
+    <p style="text-align:center; font-size:16px;">
+      مرحبا بك! انضم إلينا وكن جزءًا من فريق ملتزم وطموح. مع TEAM SERENGETI ستتطور مهاراتك في MMA وتحقق الانتصارات.
+    </p>
+
+    <form id="regForm">
+        <label>الاسم الكامل:</label>
+        <input type="text" id="name" placeholder="أدخل اسمك">
+
+        <label>تاريخ الميلاد:</label>
+        <input type="date" id="dob">
+
+        <label>الجنسية:</label>
+        <input type="text" id="nationality" placeholder="مغربية">
+
+        <label>الدور / Position:</label>
+        <input type="text" id="role" placeholder="MMA Fighter">
+
+        <label>الوزن:</label>
+        <input type="text" id="weight" placeholder="مثال: 57kg">
+
+        <label>ستايل:</label>
+        <select id="style">
+            <option>Mixed</option>
+            <option>Grappling</option>
+            <option>Striking</option>
+        </select>
+
+        <label>معلومات إضافية / Optional:</label>
+        <textarea id="extra" rows="3"></textarea>
+
+        <label>قوانين الفريق:</label>
+        <textarea rows="4" readonly>
+1. احترام جميع الأعضاء
+2. الالتزام بالتمارين
+3. الانضباط والجدية
+4. العمل الجماعي
+        </textarea>
+
+        <button type="button" onclick="generatePDF()">تحميل PDF</button>
+    </form>
+</div>
+
+<script>
+async function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const name = document.getElementById("name").value || "";
+    const dob = document.getElementById("dob").value || "";
+    const nationality = document.getElementById("nationality").value || "";
+    const role = document.getElementById("role").value || "";
+    const weight = document.getElementById("weight").value || "";
+    const style = document.getElementById("style").value || "";
+    const extra = document.getElementById("extra").value || "";
+
+    // شعار الفريق
+    const logo = new Image();
+    logo.src = 'logo.png';
+    await new Promise((resolve)=>{logo.onload = resolve;});
+    doc.addImage(logo, 'PNG', 80, 10, 50, 50);
+
+    doc.setFontSize(20);
+    doc.text("TEAM SERENGETI", 105, 70, { align: "center" });
+    doc.setFontSize(12);
+    doc.text("مرحبا بك! مع TEAM SERENGETI ستتطور مهاراتك وتحقق الانتصارات.", 105, 80, { align: "center" });
+
+    // معلومات العضو
+    doc.setFontSize(14);
+    let startY = 100;
+    doc.text(`الاسم: ${name}`, 20, startY);
+    doc.text(`تاريخ الميلاد: ${dob}`, 20, startY+10);
+    doc.text(`الجنسية: ${nationality}`, 20, startY+20);
+    doc.text(`الدور: ${role}`, 20, startY+30);
+    doc.text(`الوزن: ${weight}`, 20, startY+40);
+    doc.text(`ستايل: ${style}`, 20, startY+50);
+    doc.text(`معلومات إضافية: ${extra}`, 20, startY+60);
+
+    // قوانين الفريق
+    doc.setFontSize(12);
+    doc.text("قوانين الفريق:", 20, startY+80);
+    doc.text("1. احترام جميع الأعضاء", 25, startY+90);
+    doc.text("2. الالتزام بالتمارين", 25, startY+100);
+    doc.text("3. الانضباط والجدية", 25, startY+110);
+    doc.text("4. العمل الجماعي", 25, startY+120);
+
+    // رسالة شكر
+    doc.setFontSize(14);
+    doc.text("شكراً على اهتمامك بالانضمام لفريق TEAM SERENGETI!", 105, startY+140, { align: "center" });
+
+    doc.save(`${name}_TEAM_SERENGETI.pdf`);
+}
+</script>
+
+</body>
+</html>
